@@ -1,24 +1,45 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f9fbf1;
-  --color-foreground: #1f1f1f;
+  --color-background: #fcfdf9;
+  --color-foreground: #1a1b15;
   --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --color-sav-bg: #f9fbf1;
-  --color-sav-surface: #f6f6f6;
-  --color-sav-card: #fdfefb;
-  --color-sav-text: #1f1f1f;
-  --color-sav-gold: #c3ac45;
-  --color-sav-gold-bright: #cfbd63;
-  --color-sav-gold-pale: #e7df9e;
-  --color-sav-gold-dark: #a68e38;
-  --color-sav-bronze: #c2a171;
-  --color-sav-tan: #d7c6af;
-  --radius-superellipse: 52px;
-  --shadow-card: 2px 2px 4px rgba(31,31,31,0.04), inset -1px -1px 6px rgba(31,31,31,0.04);
-  --shadow-button: 4px 4px 12px rgba(53,43,11,0.06);
-  --shadow-inset-gold: inset 0 -4px 8px rgba(53,43,11,0.08);
+  --color-sav-bg: #fcfdf9;
+  --color-sav-surface: #f3f5ed;
+  --color-sav-card: rgba(255, 255, 255, 0.75);
+  --color-sav-text: #1a1b15;
+  --color-sav-gold: #bda237;
+  --color-sav-gold-bright: #d4bc54;
+  --color-sav-gold-pale: #efe8bd;
+  --color-sav-gold-dark: #917c24;
+  --color-sav-bronze: #b6905a;
+  --color-sav-tan: #e1d3c0;
+  --radius-superellipse: 32px;
+  --shadow-card: 0 4px 20px -2px rgba(90, 77, 28, 0.05), 0 2px 8px -1px rgba(90, 77, 28, 0.02), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  --shadow-button: 0 4px 14px rgba(189, 162, 55, 0.25);
+  --shadow-inset-gold: inset 0 -3px 6px rgba(145, 124, 36, 0.12);
+}
+
+@keyframes float-ambient {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
 }
 
 body {
@@ -27,25 +48,165 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(239, 232, 189, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(225, 211, 192, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(252, 253, 249, 0.8) 0%, #fcfdf9 100%);
+  background-attachment: fixed;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -19;
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(189, 162, 55, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(189, 162, 55, 0.03) 1px, transparent 1px);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+  mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 80%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(243, 245, 237, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(189, 162, 55, 0.2);
+  border-radius: 99px;
+  transition: all 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(189, 162, 55, 0.4);
 }
 
 @layer components {
   .superellipse-card {
-    @apply relative rounded-[52px] bg-gradient-to-r from-[#f6f6f6] via-[rgba(31,31,31,0.04)] to-[#f6f6f6] p-[2px];
+    position: relative;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(243, 245, 237, 0.4) 100%);
+    padding: 1px;
+    box-shadow: var(--shadow-card);
   }
+  
   .superellipse-card-inner {
-    @apply rounded-[50px] bg-[#fdfefb] p-6 shadow-[2px_2px_4px_rgba(31,31,31,0.04),inset_-1px_-1px_6px_rgba(31,31,31,0.04)];
+    border-radius: 27px;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    backdrop-filter: blur(20px) saturate(120%);
+    padding: 1.5rem;
   }
+  
   .sav-card {
-    @apply rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md;
+    position: relative;
+    border-radius: 24px;
+    border: 1px solid rgba(189, 162, 55, 0.12);
+    background: rgba(255, 255, 255, 0.75);
+    -webkit-backdrop-filter: blur(16px) saturate(110%);
+    backdrop-filter: blur(16px) saturate(110%);
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px -2px rgba(90, 77, 28, 0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  
+  .sav-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(189, 162, 55, 0.28);
+    box-shadow: 0 12px 28px -4px rgba(90, 77, 28, 0.08), 0 2px 12px -2px rgba(189, 162, 55, 0.04), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+  
   .sav-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sav-gold px-6 py-3 text-sm font-semibold text-sav-text shadow-[4px_4px_12px_rgba(53,43,11,0.06)] transition-all duration-200 hover:bg-sav-gold-bright active:scale-[0.98];
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, var(--color-sav-gold-bright) 0%, var(--color-sav-gold) 50%, var(--color-sav-gold-dark) 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    box-shadow: var(--shadow-button), var(--shadow-inset-gold);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
   }
+  
+  .sav-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(189, 162, 55, 0.35), var(--shadow-inset-gold);
+    filter: brightness(1.05);
+  }
+  
+  .sav-btn-primary:active {
+    transform: translateY(1px);
+    filter: brightness(0.95);
+  }
+  
   .sav-btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-sav-text border border-gray-200 shadow-[4px_4px_12px_rgba(53,43,11,0.06)] transition-all duration-200 hover:bg-sav-surface active:scale-[0.98];
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: var(--color-sav-text);
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid rgba(189, 162, 55, 0.15);
+    box-shadow: 0 2px 6px rgba(90, 77, 28, 0.03), inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
   }
+  
+  .sav-btn-secondary:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(189, 162, 55, 0.3);
+    box-shadow: 0 4px 12px rgba(90, 77, 28, 0.06);
+    transform: translateY(-1px);
+  }
+  
+  .sav-btn-secondary:active {
+    transform: translateY(1px);
+  }
+  
   .sav-badge {
-    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: capitalize;
   }
+}
+
+/* Glassmorphism modal wrapper */
+.modal-overlay {
+  background: rgba(26, 27, 21, 0.15);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
