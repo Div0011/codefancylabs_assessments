@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #f9fbf1;
+  --color-foreground: #1f1f1f;
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-sav-bg: #f9fbf1;
+  --color-sav-surface: #f6f6f6;
+  --color-sav-card: #fdfefb;
+  --color-sav-text: #1f1f1f;
+  --color-sav-gold: #c3ac45;
+  --color-sav-gold-bright: #cfbd63;
+  --color-sav-gold-pale: #e7df9e;
+  --color-sav-gold-dark: #a68e38;
+  --color-sav-bronze: #c2a171;
+  --color-sav-tan: #d7c6af;
+  --radius-superellipse: 52px;
+  --shadow-card: 2px 2px 4px rgba(31,31,31,0.04), inset -1px -1px 6px rgba(31,31,31,0.04);
+  --shadow-button: 4px 4px 12px rgba(53,43,11,0.06);
+  --shadow-inset-gold: inset 0 -4px 8px rgba(53,43,11,0.08);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .superellipse-card {
+    @apply relative rounded-[52px] bg-gradient-to-r from-[#f6f6f6] via-[rgba(31,31,31,0.04)] to-[#f6f6f6] p-[2px];
+  }
+  .superellipse-card-inner {
+    @apply rounded-[50px] bg-[#fdfefb] p-6 shadow-[2px_2px_4px_rgba(31,31,31,0.04),inset_-1px_-1px_6px_rgba(31,31,31,0.04)];
+  }
+  .sav-card {
+    @apply rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md;
+  }
+  .sav-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sav-gold px-6 py-3 text-sm font-semibold text-sav-text shadow-[4px_4px_12px_rgba(53,43,11,0.06)] transition-all duration-200 hover:bg-sav-gold-bright active:scale-[0.98];
+  }
+  .sav-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-sav-text border border-gray-200 shadow-[4px_4px_12px_rgba(53,43,11,0.06)] transition-all duration-200 hover:bg-sav-surface active:scale-[0.98];
+  }
+  .sav-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold;
+  }
+}
